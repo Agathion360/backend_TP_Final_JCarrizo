@@ -5,7 +5,7 @@ import ProductManager from "../productManager.js";
 
 
 
-const productManager = new ProductManager('./src/json/productos.json');
+const productManager = new ProductManager('./src/send/productos.send');
 const router = Router();
 
 // Middleware para verificar la propiedad code duplicados en el body
@@ -39,10 +39,10 @@ router.get('/products', async (req, res) => {
  const limit = parseInt(req.query.limit);
 
         if (!isNaN(limit)) {
-            res.status(200).json(products.slice(0, limit));
+            res.status(200).send(products.slice(0, limit));
            
         }else{
-            res.status(200).json(products);
+            res.status(200).send(products);
         }
 });
 
@@ -53,7 +53,7 @@ router.get('/products', async (req, res) => {
 router.get('/products/:pid', async (req, res) => {
     const pid = parseInt(req.params.pid);
     const product = await productManager.getProductsById(pid);
-    product? res.status(200).json(product) : res.status(404).send({ error: 'Producto no encontrado' });
+    product? res.status(200).send(product) : res.status(404).send({ error: 'Producto no encontrado' });
 
 });
 
