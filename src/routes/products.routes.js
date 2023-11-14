@@ -5,7 +5,7 @@ import ProductManager from "../productManager.js";
 
 
 
-const productManager = new ProductManager('./src/send/productos.send');
+const productManager = new ProductManager('./src/json/productos.json');
 const router = Router();
 
 // Middleware para verificar la propiedad code duplicados en el body

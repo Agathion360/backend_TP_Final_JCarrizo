@@ -4,26 +4,59 @@ import Carts from "../carts.js";
 const cartManager = new Carts('./src/json/carts.json');
 const router = Router();
 
-router.get('/carts', (req, res) => {
-    const carts = cartManager.getCarts();
-    res.status(200).send(carts);
-});
 
-router.get('/carts/:id', async (req, res) => {
-    const id = parseInt(req.params.id);
-    const cart = await cartManager.getCartById(id);
-    if (!cart) {
-        res.status(404).send({ error: 'no se encontro el carrito' });
+router.post('/', async (req, res) => {
+    try {
+        const cart = await cartManager.addCart();
+        res.status(200).send(cart);
+    } catch (error) {
+        res.status(500).send({ error: error.message });
     }
-    res.status(200).send(cart);
 });
 
-router.post('/carts/:cid/products/:pid', async (req, res) => {
-    const cartId = parseInt(req.params.cid);
-    const productId = parseInt(req.params.pid);
-    const quantity = parseInt(req.body.quantity);
-    const cart = await cartManager.addProductToCart(cartId, productId, quantity);
-    res.status(200).send(cart);
+router.get('/', async (req, res) => {
+    try{
+        const carts = await cartManager.initCart();
+        res.status(200).send(carts);
+    }catch(error){
+        res.status(500).send({ error: error.message }); 
+    }
+});
+
+
+
+router.get('/:cid', async (req, res) => {
+    try{
+        const id = parseInt(req.params.cid);
+        if (isNaN(id)) {
+            res.status(400).send({ error: 'El id del carrito debe ser un número' });
+            return;
+        }
+        const cart = await cartManager.getCartById(id);
+        if (!cart) {
+            res.status(404).send({ error: 'no se encontro el carrito' });
+        } else {
+            res.status(200).send(cart);
+        }
+    }catch(error){
+        res.status(500).send({ error: error.message }); 
+    }
+});
+
+router.post('/:cid/products/:pid', async (req, res) => {
+    try{
+        const cid = parseInt(req.params.cid);
+        const pid = parseInt(req.params.pid);
+        const quantity = parseInt(req.body.quantity);
+        const cart = await cartManager.addProductInCart(cid, pid, quantity);
+        if (!cart) {
+            res.status(404).send({ error: 'no se encontro el carrito' });
+        } else {
+            res.status(200).send(cart);
+        }
+    }catch(error){
+        res.status(500).send({ error: error.message }); 
+    }
 });
 
 

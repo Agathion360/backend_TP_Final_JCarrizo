@@ -48,7 +48,6 @@ async addProduct(product) {
 }
 
 
-
 async getProducts() {
     try{
         return this.products
@@ -58,7 +57,6 @@ async getProducts() {
         console.error("Error al obtener la lista de productos:", error.message)
     }
 }
-
 
 async getProductsById(id) {
     try{
@@ -76,7 +74,7 @@ async updateProduct(id, product) {
         if (index === -1) {
             throw new Error("Producto no encontrado")
         }
-        delete product.id; // Elimina la propiedad id del objeto product
+        delete product.id; 
         this.products[index] = { ...this.products[index], ...product }
         await fs.promises.writeFile(this.path, JSON.stringify(this.products, null, 2))
     } catch (error) {

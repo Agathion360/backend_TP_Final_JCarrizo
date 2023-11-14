@@ -12,8 +12,8 @@ app.use(express.urlencoded({ extended: true }));
 
 
 //endpoints
-app.use('/api', products);
-app.use('/api', carts);
+app.use('/api/products', products);
+app.use('/api/carts', carts);
 
 
 //si no encuentra la ruta va por defecto aca
