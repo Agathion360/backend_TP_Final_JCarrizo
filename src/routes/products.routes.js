@@ -26,14 +26,14 @@ const checkId = () => {
 }
 }
 
-router.post('/products', checkId(), async (req, res) => {
+router.post('/', checkId(), async (req, res) => {
   const product = req.body;
   await productManager.addProduct(product);
   res.status(201).send(product);
 });
 
 
-router.get('/products', async (req, res) => {
+router.get('/', async (req, res) => {
     
  const products = await productManager.getProducts();
  const limit = parseInt(req.query.limit);
@@ -50,7 +50,7 @@ router.get('/products', async (req, res) => {
 
 
 
-router.get('/products/:pid', async (req, res) => {
+router.get('/:pid', async (req, res) => {
     const pid = parseInt(req.params.pid);
     const product = await productManager.getProductsById(pid);
     product? res.status(200).send(product) : res.status(404).send({ error: 'Producto no encontrado' });
@@ -58,14 +58,14 @@ router.get('/products/:pid', async (req, res) => {
 });
 
 
-router.put('/products/:pid', async (req, res) => {
+router.put('/:pid', async (req, res) => {
     const pid = parseInt(req.params.pid);
     await productManager.updateProduct(pid, req.body);
     res.status(200).send("Producto actualizado con éxito.");
 });
 
 
-router.delete('/products/:pid', async (req, res) => {
+router.delete('/:pid', async (req, res) => {
     const pid = parseInt(req.params.pid);
     await productManager.deleteProduct(pid);
     res.status(200).send("Producto eliminado con éxito.");
